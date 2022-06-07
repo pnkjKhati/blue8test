@@ -10,7 +10,7 @@ const LoginScreen = () => {
     try {
       if (phoneNumber) {
         console.log(phoneNumber);
-        signInWithPhoneNumber(`+91${phoneNumber}`);
+        signInWithPhoneNumber(`+91 ${phoneNumber}`);
       } else {
         console.log("inncorrect number");
       }
