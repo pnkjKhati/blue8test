@@ -5,6 +5,8 @@ import auth from "@react-native-firebase/auth";
 
 const LoginScreen = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [otpScreen, setOtpScreen] = useState(false);
+  const [confirmCode, setConfirmCode] = useState("");
   const [otp, setOtp] = useState("");
   const genrateOtp = async () => {
     try {
@@ -22,9 +24,10 @@ const LoginScreen = () => {
   async function signInWithPhoneNumber(phone) {
     try {
       const confirmation = await auth().signInWithPhoneNumber(phone);
-      setOtp(confirmation);
-      // setOtpScreen(true);
-      // setOtpGenrate(true);
+      if (confirmation) {
+        setConfirmCode(confirmation);
+        setOtpScreen(true);
+      }
     } catch (error) {
       error;
       console.log(error);
@@ -34,17 +37,32 @@ const LoginScreen = () => {
   console.log(otp, "0------");
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        placeholder="Enter Mobile Number"
-        keyboardType="numeric"
-        value={phoneNumber}
-        style={styles.Input}
-        onChangeText={e => setPhoneNumber(e)}
-      />
-      <TouchableOpacity style={styles.Btn} onPress={genrateOtp}>
-        <Text style={styles.BtnText}>Get Otp</Text>
-      </TouchableOpacity>
+    <View style={{ flex: 1 }}>
+      {otpScreen
+        ? <View style={styles.container}>
+            <TextInput
+              placeholder="Enter Otp"
+              keyboardType="numeric"
+              value={otp}
+              style={styles.Input}
+              onChangeText={e => setOtp(e)}
+            />
+            <TouchableOpacity style={styles.Btn} onPress={genrateOtp}>
+              <Text style={styles.BtnText}>Submit</Text>
+            </TouchableOpacity>
+          </View>
+        : <View style={styles.container}>
+            <TextInput
+              placeholder="Enter Mobile Number"
+              keyboardType="numeric"
+              value={phoneNumber}
+              style={styles.Input}
+              onChangeText={e => setPhoneNumber(e)}
+            />
+            <TouchableOpacity style={styles.Btn} onPress={genrateOtp}>
+              <Text style={styles.BtnText}>Get Otp</Text>
+            </TouchableOpacity>
+          </View>}
     </View>
   );
 };
