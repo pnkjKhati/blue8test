@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "876083325587",
+    "project_id": "blue8-49d36",
+    "storage_bucket": "blue8-49d36.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:876083325587:android:c3c2fa155a0c678b653b66",
+        "android_client_info": {
+          "package_name": "com.blue8"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "876083325587-hqdbs4c8duukrc3g3rmiscpjjhra3inn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.blue8",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "876083325587-7c50p6d9iga1v6kn77l583b2r7ktviqh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsHtzpb1D8ht3I3WktRODb5P6DtJizdrk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "876083325587-7c50p6d9iga1v6kn77l583b2r7ktviqh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
