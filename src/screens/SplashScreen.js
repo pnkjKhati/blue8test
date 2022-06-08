@@ -1,13 +1,23 @@
 import { StyleSheet, Text, View, Image } from "react-native";
 import { HOME, LOGIN } from "../utils/Constants";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-const SplashScreen = ({ navigation }) => {
-  useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate(LOGIN);
-    }, 3000);
-  }, []);
+const SplashScreen = ({ navigation, route }) => {
+  const {params={click:false}} = route
+  useEffect(
+    () => {
+      if (params?.click) {
+        setTimeout(() => {
+          navigation.navigate(HOME);
+        }, 3000);
+      } else {
+        setTimeout(() => {
+          navigation.navigate(LOGIN);
+        }, 3000);
+      }
+    },
+    [params.click]
+  );
 
   return (
     <View style={styles.container}>

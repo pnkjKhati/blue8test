@@ -4,19 +4,29 @@ import {
   View,
   TextInput,
   Alert,
-  TouchableOpacity
+  TouchableOpacity,
+  ActivityIndicator
 } from "react-native";
-import React, { useState } from "react";
+import React, { useState , useEffect} from "react";
 import auth from "@react-native-firebase/auth";
 import { HOME } from "../utils/Constants";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otpScreen, setOtpScreen] = useState(false);
   const [confirm, setConfirm] = useState(null);
   const [code, setCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false)
+
+
+  useEffect(() => {
+    getToken()
+  }, [])
+  
 
   const genrateOtp = async () => {
+    setIsLoading(true)
     try {
       if (phoneNumber) {
         signInWithPhoneNumber(`+91 ${phoneNumber}`);
@@ -25,6 +35,7 @@ const LoginScreen = ({ navigation }) => {
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false)
     }
   };
 
@@ -35,24 +46,39 @@ const LoginScreen = ({ navigation }) => {
       if (confirmation) {
         setConfirm(confirmation);
         setOtpScreen(true);
+        setIsLoading(false)
       }
     } catch (error) {
-      error;
+      setIsLoading(false)
       console.log(error);
     }
   }
 
   const LogInAuth = async () => {
+    setIsLoading(true)
     try {
       const res = await confirm.confirm(code);
-      console.log(res, "----------><><><><><<><><><>>>");
       if (res) {
+        await AsyncStorage.setItem('token', res?.user?._user.uid)
         navigation.navigate(HOME);
       }
     } catch (error) {
       Alert.alert("Invalid code.");
+      setIsLoading(false)
     }
   };
+
+
+  const getToken = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token')
+      if(value !== null) {
+        navigation.navigate(HOME)
+      }
+    } catch(e) {
+      console.log(e)
+    }
+  }
 
   return (
     <View style={{ flex: 1 }}>
@@ -67,7 +93,8 @@ const LoginScreen = ({ navigation }) => {
               onChangeText={e => setCode(e)}
             />
             <TouchableOpacity style={styles.Btn} onPress={LogInAuth}>
-              <Text style={styles.BtnText}>Login</Text>
+            {isLoading ?<ActivityIndicator size="small" color="red" />:
+              <Text style={styles.BtnText}>Login</Text>}
             </TouchableOpacity>
           </View>
         : <View style={styles.container}>
@@ -81,7 +108,8 @@ const LoginScreen = ({ navigation }) => {
               onChangeText={e => setPhoneNumber(e)}
             />
             <TouchableOpacity style={styles.Btn} onPress={genrateOtp}>
-              <Text style={styles.BtnText}>Get Otp</Text>
+            {isLoading ?<ActivityIndicator size="small" color="red" />:
+              <Text style={styles.BtnText}>Get Otp</Text>}
             </TouchableOpacity>
           </View>}
     </View>
