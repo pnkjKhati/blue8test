@@ -1,17 +1,24 @@
-import { StyleSheet, Text, View, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Alert,
+  TouchableOpacity
+} from "react-native";
 import React, { useState } from "react";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import auth from "@react-native-firebase/auth";
+import { HOME } from "../utils/Constants";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [otpScreen, setOtpScreen] = useState(false);
-  const [confirmCode, setConfirmCode] = useState("");
-  const [otp, setOtp] = useState("");
+  const [confirm, setConfirm] = useState(null);
+  const [code, setCode] = useState("");
+
   const genrateOtp = async () => {
     try {
       if (phoneNumber) {
-        console.log(phoneNumber);
         signInWithPhoneNumber(`+91 ${phoneNumber}`);
       } else {
         console.log("inncorrect number");
@@ -24,8 +31,9 @@ const LoginScreen = () => {
   async function signInWithPhoneNumber(phone) {
     try {
       const confirmation = await auth().signInWithPhoneNumber(phone);
+      console.log(confirmation, "confirmation");
       if (confirmation) {
-        setConfirmCode(confirmation);
+        setConfirm(confirmation);
         setOtpScreen(true);
       }
     } catch (error) {
@@ -34,24 +42,37 @@ const LoginScreen = () => {
     }
   }
 
-  console.log(otp, "0------");
+  const LogInAuth = async () => {
+    try {
+      const res = await confirm.confirm(code);
+      console.log(res, "----------><><><><><<><><><>>>");
+      if (res) {
+        navigation.navigate(HOME);
+      }
+    } catch (error) {
+      Alert.alert("Invalid code.");
+    }
+  };
 
   return (
     <View style={{ flex: 1 }}>
       {otpScreen
         ? <View style={styles.container}>
+            <Text style={styles.header}>Login Page</Text>
             <TextInput
               placeholder="Enter Otp"
               keyboardType="numeric"
-              value={otp}
+              value={code}
               style={styles.Input}
-              onChangeText={e => setOtp(e)}
+              onChangeText={e => setCode(e)}
             />
-            <TouchableOpacity style={styles.Btn} onPress={genrateOtp}>
-              <Text style={styles.BtnText}>Submit</Text>
+            <TouchableOpacity style={styles.Btn} onPress={LogInAuth}>
+              <Text style={styles.BtnText}>Login</Text>
             </TouchableOpacity>
           </View>
         : <View style={styles.container}>
+            <Text style={styles.header}>Login Page</Text>
+
             <TextInput
               placeholder="Enter Mobile Number"
               keyboardType="numeric"
@@ -97,5 +118,12 @@ const styles = StyleSheet.create({
   BtnText: {
     fontSize: 18,
     color: "#fff"
+  },
+  header: {
+    fontSize: 25,
+    textAlign: "center",
+    color: "#0071ff",
+    backgroundColor: "#fff",
+    marginVertical: 20
   }
 });

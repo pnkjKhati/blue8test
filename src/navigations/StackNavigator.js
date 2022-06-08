@@ -12,7 +12,11 @@ function StackNavigator() {
         component={screens.splash}
         options={{ headerShown: false }}
       />
-      <Stack.Screen name={LOGIN} component={screens.login} />
+      <Stack.Screen
+        name={LOGIN}
+        component={screens.login}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen name={HOME} component={screens.home} />
     </Stack.Navigator>
   );
